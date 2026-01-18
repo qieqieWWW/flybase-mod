@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "EEE",
+    "EFE",
+    "OOO"
+  ],
+  "key": {
+    "E": "minecraft:end_crystal",
+    "F": "minecraft:feather",
+    "O": "minecraft:crying_obsidian"
+  },
+  "result": {
+    "id": "flybase:flying_base"
+  }
+}

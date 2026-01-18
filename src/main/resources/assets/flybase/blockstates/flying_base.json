@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "flybase:block/flying_base"
+    }
+  }
+}
