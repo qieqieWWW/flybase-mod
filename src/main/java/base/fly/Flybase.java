@@ -3,6 +3,8 @@ package base.fly;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,17 @@ public class Flybase implements ModInitializer {
 		// 注册命令
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			FlybaseCommand.register(dispatcher);
+		});
+
+		// 玩家重生/加入/离线时清理缓存状态，避免死亡后仍被判定“已在范围内”而不重新授予飞行
+		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+			FlyingAbilityManager.removePlayer(newPlayer.getUuid());
+		});
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+			FlyingAbilityManager.removePlayer(handler.player.getUuid());
+		});
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			FlyingAbilityManager.removePlayer(handler.player.getUuid());
 		});
 
 		// 注册服务器刻事件
